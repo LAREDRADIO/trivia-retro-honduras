@@ -2,9 +2,124 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Trivia Retro Honduras</title>
 <style>
-  /* (El mismo estilo de antes, omitido para brevedad, puedes copiar el código previo) */
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  body {
+    background: #000;
+    color: #00ff00;
+    font-family: 'Press Start 2P', cursive;
+    padding: 20px;
+    user-select: none;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 10px;
+    background-color: #00ff00;
+    animation: blink 1s steps(2, start) infinite;
+    vertical-align: bottom;
+  }
+
+  @keyframes blink {
+    0%, 50% { background-color: #00ff00; }
+    51%, 100% { background-color: transparent; }
+  }
+
+  #score, #timer, #level {
+    font-size: 0.9rem;
+    margin: 8px 0;
+  }
+
+  #question {
+    font-size: 1.2rem;
+    margin: 20px 0 10px;
+    min-height: 60px;
+  }
+
+  #options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  button.option {
+    background: black;
+    border: 3px solid #00ff00;
+    color: #00ff00;
+    padding: 12px 20px;
+    margin: 6px auto;
+    width: 300px;
+    max-width: 90vw;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease;
+    display: block;
+  }
+
+  button.option:hover {
+    background: #00ff00;
+    color: black;
+  }
+
+  #feedback {
+    margin-top: 15px;
+    font-weight: bold;
+    min-height: 24px;
+  }
+
+  button#restart {
+    background: #00ff00;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  a {
+    color: #00ff00;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .footer {
+    margin-top: 40px;
+    font-size: 0.8rem;
+    color: #0a0;
+  }
+
+  /* Scanlines efecto CRT */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 0, 0.05),
+        rgba(0, 255, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+    z-index: 1000;
+  }
 </style>
 </head>
 <body>
@@ -14,16 +129,16 @@
 <div id="score">Puntaje: 0</div>
 <div id="level">Nivel: 1</div>
 <div id="timer">Tiempo: 15</div>
-<div id="question"></div>
+<div id="question">Cargando pregunta...</div>
 <div id="options"></div>
 <div id="feedback"></div>
 
 <div class="footer">
   Este juego educativo fue desarrollado por <strong>La RED</strong> — Red Educomunicativa para el Desarrollo.<br/>
-  Escúchanos en línea en <a href="https://www.laredradio.com" target="_blank">www.laredradio.com</a>
+  Escúchanos en línea en <a href="https://www.laredradio.com" target="_blank" rel="noopener noreferrer">www.laredradio.com</a>
 </div>
 
-<!-- Sonidos base64 para no usar archivos externos -->
+<!-- Sonidos embebidos para correcto e incorrecto -->
 <audio id="correctSound" preload="auto">
   <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
 </audio>
@@ -32,10 +147,15 @@
 </audio>
 
 <script>
-  // Aquí el mismo código de antes (preguntas, lógica, etc)
-
   const preguntas = [
-    // const preguntas = [
+    { pregunta: "¿Cuál es la capital de Honduras?", opciones: ["Tegucigalpa", "San Pedro Sula", "La Ceiba", "Choluteca"], respuestaCorrecta: "Tegucigalpa" },
+    { pregunta: "¿Cuál es la moneda oficial de Honduras?", opciones: ["Peso", "Lempira", "Dólar", "Euro"], respuestaCorrecta: "Lempira" },
+    { pregunta: "¿En qué año se independizó Honduras?", opciones: ["1821", "1810", "1901", "1776"], respuestaCorrecta: "1821" },
+    { pregunta: "¿Cuál es el nombre del parque nacional famoso por sus cascadas en Honduras?", opciones: ["Parque Nacional La Tigra", "Parque Nacional Cusuco", "Parque Nacional Celaque", "Parque Nacional Pico Bonito"], respuestaCorrecta: "Parque Nacional La Tigra" },
+    { pregunta: "¿Qué importante festividad hondureña se celebra en diciembre con posadas y villancicos?", opciones: ["Semana Santa", "Feria Juniana", "Navidad", "Día de la Independencia"], respuestaCorrecta: "Navidad" },
+    { pregunta: "¿Cuál es el baile tradicional que representa a la cultura garífuna?", opciones: ["La Punta", "El Son", "La Cumbia", "La Salsa"], respuestaCorrecta: "La Punta" },
+    { pregunta: "¿Cuál es el equipo de fútbol más popular de Honduras?", opciones: ["Real España", "Motagua", "Olimpia", "Vida"], respuestaCorrecta: "Olimpia" }
+    const preguntas = [
   { pregunta: "¿Cuál es la capital de Honduras?", opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"], respuestaCorrecta: "Tegucigalpa" },
   { pregunta: "¿En qué año se firmó la independencia de Honduras?", opciones: ["1821", "1810", "1830", "1850"], respuestaCorrecta: "1821" },
   { pregunta: "¿Cuál es el ave nacional de Honduras?", opciones: ["Guacamaya roja", "Colibrí", "Quetzal", "Águila arpía"], respuestaCorrecta: "Guacamaya roja" },
@@ -90,15 +210,16 @@
   { pregunta: "¿Cuál es el equipo de fútbol más popular de Honduras?", opciones: ["Real España", "Motagua", "Olimpia", "Vida"], respuestaCorrecta: "Olimpia" }
 ];
 
+  ];
 
   let puntaje = 0;
   let nivel = 1;
-  let tiempoPorPregunta = 15;
+  const tiempoPorPregunta = 15;
   let tiempoRestante = tiempoPorPregunta;
   let indicePreguntaActual = 0;
   let preguntasBarajadas = [];
 
-  // Función para mezclar arreglo
+  // Mezclar arreglo con Fisher-Yates
   function mezclar(array) {
     let n = array.length, t, i;
     while (n) {
@@ -132,6 +253,7 @@
       return;
     }
 
+    // Subir nivel por puntaje
     if (puntaje >= 100) nivel = 2;
     if (puntaje >= 200) nivel = 3;
     actualizarInfo();
@@ -143,6 +265,7 @@
     document.getElementById("question").textContent = p.pregunta;
     const opcionesDiv = document.getElementById("options");
     opcionesDiv.innerHTML = "";
+
     p.opciones.forEach(opcion => {
       const btn = document.createElement("button");
       btn.className = "option";
@@ -202,8 +325,9 @@
     document.getElementById("timer").textContent = `Tiempo: ${tiempoRestante}`;
   }
 
+  // Inicia el juego al cargar
   iniciarJuego();
-</script>
 
+</script>
 </body>
 </html>
