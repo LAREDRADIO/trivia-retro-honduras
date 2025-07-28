@@ -77,6 +77,7 @@
     margin-top: 15px;
     font-weight: bold;
     min-height: 24px;
+    height: 24px;
   }
 
   button#restart {
@@ -147,8 +148,34 @@
 </audio>
 
 <script>
-  const preguntas = [
-  const preguntas = [
+const preguntas = [
+  {
+    pregunta: "¿Cuál es la capital de Honduras?",
+    opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"],
+    respuestaCorrecta: 3
+  },
+  {
+    pregunta: "¿En qué año se firmó la independencia de Honduras?",
+    opciones: ["1821", "1810", "1830", "1850"],
+    respuestaCorrecta: 0
+  },
+  {
+    pregunta: "¿Cuál es el ave nacional de Honduras?",
+    opciones: ["Águila harpía", "Quetzal", "Guacamaya roja", "Tucán esmeralda"],
+    respuestaCorrecta: 2
+  },
+  {
+    pregunta: "¿Cuál es el plato típico que lleva frijoles, mantequilla y queso en una tortilla de harina?",
+    opciones: ["Tamal", "Baleada", "Enchilada", "Tostada"],
+    respuestaCorrecta: 1
+  },
+  {
+    pregunta: "¿Qué mar baña la costa norte de Honduras?",
+    opciones: ["Mar Caribe", "Océano Atlántico", "Océano Pacífico", "Mar de Cortés"],
+    respuestaCorrecta: 0
+  }
+];
+const preguntas = [
   {
     pregunta: "¿Cuál es la capital de Honduras?",
     opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"],
@@ -727,125 +754,66 @@
     opciones: ["Parque Nacional La Tigra", "Parque Nacional Celaque", "Parque Nacional Pico Bonito", "Parque Nacional Montaña de Yoro"],
     respuestaCorrecta: 1
   }
+  
+// Variables de juego
+let indicePreguntaActual = 0;
+let puntaje = 0;
+const totalPreguntas = preguntas.length;
 
-  ];
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const scoreEl = document.getElementById("score");
+const feedbackEl = document.getElementById("feedback");
+const correctSound = document.getElementById("correctSound");
+const wrongSound = document.getElementById("wrongSound");
 
-  let puntaje = 0;
-  let nivel = 1;
-  const tiempoPorPregunta = 15;
-  let tiempoRestante = tiempoPorPregunta;
-  let indicePreguntaActual = 0;
-  let preguntasBarajadas = [];
-
-  // Mezclar arreglo con Fisher-Yates
-  function mezclar(array) {
-    let n = array.length, t, i;
-    while (n) {
-      i = Math.floor(Math.random() * n--);
-      t = array[n];
-      array[n] = array[i];
-      array[i] = t;
-    }
-    return array;
+function mostrarPregunta() {
+  feedbackEl.textContent = "";
+  if(indicePreguntaActual >= totalPreguntas) {
+    questionEl.textContent = `¡Juego terminado! Puntaje final: ${puntaje} / ${totalPreguntas}`;
+    optionsEl.innerHTML = `<button id="restart">Reiniciar juego</button>`;
+    document.getElementById("restart").addEventListener("click", reiniciarJuego);
+    return;
   }
+  
+  const preguntaObj = preguntas[indicePreguntaActual];
+  questionEl.textContent = `Pregunta ${indicePreguntaActual + 1} de ${totalPreguntas}: ${preguntaObj.pregunta}`;
+  optionsEl.innerHTML = "";
 
-  function iniciarJuego() {
-    puntaje = 0;
-    nivel = 1;
-    indicePreguntaActual = 0;
-    tiempoRestante = tiempoPorPregunta;
-    preguntasBarajadas = mezclar([...preguntas]);
-    mostrarPregunta();
-    actualizarInfo();
-    iniciarTemporizador();
+  preguntaObj.opciones.forEach((opcion, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = opcion;
+    btn.onclick = () => seleccionarRespuesta(i);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function seleccionarRespuesta(indiceSeleccionado) {
+  const preguntaObj = preguntas[indicePreguntaActual];
+  if(indiceSeleccionado === preguntaObj.respuestaCorrecta) {
+    puntaje++;
+    feedbackEl.textContent = "¡Correcto!";
+    correctSound.play();
+  } else {
+    feedbackEl.textContent = `Incorrecto. La respuesta correcta es: ${preguntaObj.opciones[preguntaObj.respuestaCorrecta]}`;
+    wrongSound.play();
   }
+  scoreEl.textContent = `Puntaje: ${puntaje}`;
+  indicePreguntaActual++;
+  setTimeout(mostrarPregunta, 1500);
+}
 
-  function actualizarInfo() {
-    document.getElementById("score").textContent = `Puntaje: ${puntaje}`;
-    document.getElementById("level").textContent = `Nivel: ${nivel}`;
-  }
+function reiniciarJuego() {
+  puntaje = 0;
+  indicePreguntaActual = 0;
+  scoreEl.textContent = `Puntaje: ${puntaje}`;
+  mostrarPregunta();
+}
 
-  function mostrarPregunta() {
-    if (indicePreguntaActual >= preguntasBarajadas.length) {
-      finalizarJuego();
-      return;
-    }
-
-    // Subir nivel por puntaje
-    if (puntaje >= 100) nivel = 2;
-    if (puntaje >= 200) nivel = 3;
-    actualizarInfo();
-
-    tiempoRestante = tiempoPorPregunta;
-    actualizarTemporizador();
-
-    const p = preguntasBarajadas[indicePreguntaActual];
-    document.getElementById("question").textContent = p.pregunta;
-    const opcionesDiv = document.getElementById("options");
-    opcionesDiv.innerHTML = "";
-
-    p.opciones.forEach(opcion => {
-      const btn = document.createElement("button");
-      btn.className = "option";
-      btn.textContent = opcion;
-      btn.onclick = () => responder(opcion);
-      opcionesDiv.appendChild(btn);
-    });
-    document.getElementById("feedback").textContent = "";
-  }
-
-  function responder(opcion) {
-    const correctSound = document.getElementById("correctSound");
-    const wrongSound = document.getElementById("wrongSound");
-
-    if (opcion === preguntasBarajadas[indicePreguntaActual].respuestaCorrecta) {
-      puntaje += 10;
-      document.getElementById("feedback").textContent = "✅ ¡Correcto!";
-      correctSound.currentTime = 0;
-      correctSound.play();
-    } else {
-      document.getElementById("feedback").textContent = `❌ Incorrecto. La respuesta correcta es: ${preguntasBarajadas[indicePreguntaActual].respuestaCorrecta}`;
-      wrongSound.currentTime = 0;
-      wrongSound.play();
-    }
-    indicePreguntaActual++;
-    actualizarInfo();
-    setTimeout(mostrarPregunta, 1500);
-  }
-
-  function finalizarJuego() {
-    clearInterval(timerInterval);
-    document.getElementById("question").textContent = `Juego terminado. Puntaje final: ${puntaje}`;
-    document.getElementById("options").innerHTML = `<button id="restart" onclick="iniciarJuego()">Jugar de nuevo</button>`;
-    document.getElementById("timer").textContent = "";
-    document.getElementById("feedback").textContent = "";
-  }
-
-  let timerInterval;
-  function iniciarTemporizador() {
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      tiempoRestante--;
-      actualizarTemporizador();
-      if (tiempoRestante <= 0) {
-        clearInterval(timerInterval);
-        document.getElementById("feedback").textContent = "⏰ Se acabó el tiempo!";
-        indicePreguntaActual++;
-        setTimeout(() => {
-          mostrarPregunta();
-          iniciarTemporizador();
-        }, 1500);
-      }
-    }, 1000);
-  }
-
-  function actualizarTemporizador() {
-    document.getElementById("timer").textContent = `Tiempo: ${tiempoRestante}`;
-  }
-
-  // Inicia el juego al cargar
-  iniciarJuego();
-
+// Iniciar juego
+mostrarPregunta();
 </script>
+
 </body>
 </html>
