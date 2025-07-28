@@ -1,91 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Trivia Retro - Honduras</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trivia Retro Honduras</title>
   <style>
     body {
-      margin: 0;
-      background: black;
-      color: #00FF00;
-      font-family: 'Press Start 2P', monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #111;
+      color: #0f0;
       text-align: center;
-      padding: 20px;
+      padding: 2rem;
     }
-    .pantalla {
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 600px;
+    .question {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
-    .activa {
-      display: flex;
-    }
-    button {
-      background: #000;
-      color: #00FF00;
-      border: 2px solid #00FF00;
-      padding: 10px;
-      font-family: 'Press Start 2P';
+    .option {
+      background-color: #222;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
       cursor: pointer;
-      user-select: none;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #00FF00;
-      color: black;
-    }
-    .opcion {
       display: block;
-      margin: 8px 0;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .dato-extra {
-      font-size: 12px;
-      color: #FFFF00;
+    .option:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+    .feedback {
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+    .score {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #888;
     }
   </style>
 </head>
+
 <body>
-
-  <div id="pantallaInicio" class="pantalla activa">
-    <h1>🎮 TRIVIA RETRO: HONDURAS 🇭🇳</h1>
-    <p><em>Este es un material desarrollado por La RED Radio.</em></p>
-    <p>¡Disfruta aprendiendo sobre Honduras!</p>
-    <button onclick="iniciarJuego()">INICIAR</button>
+  <h1>Trivia Retro Honduras</h1>
+  <div id="score" class="score">Puntaje: 0 | Pregunta 1 de 10</div>
+  <div id="question" class="question"></div>
+  <div id="options"></div>
+  <div id="feedback" class="feedback"></div>
+  <div class="footer">
+    Este juego educativo fue desarrollado por <strong>La RED</strong> — Red Educomunicativa para el Desarrollo. <br>
+    Escúchanos en línea en <a href="https://www.laredradio.com" target="_blank" style="color:#0f0;">www.laredradio.com</a>
   </div>
 
-  <div id="pantallaPregunta" class="pantalla">
-    <h2 id="textoPregunta"></h2>
-    <div id="opciones"></div>
-  </div>
-
-  <div id="pantallaResultado" class="pantalla">
-    <h2>🎉 ¡Juego terminado!</h2>
-    <p id="puntajeFinal"></p>
-    <button onclick="reiniciarJuego()">JUGAR DE NUEVO</button>
-  </div>
-
-<script>
-  // Lista completa de 100 preguntas
-  const preguntasOriginales = [
-    {pregunta:"¿En qué año se firmó la independencia de Honduras?", opciones:["1821","1844","1800","1876"], respuesta:"1821", explicacion:"La independencia de Honduras fue proclamada el 15 de septiembre de 1821."},
-    {pregunta:"¿Cuál es la capital de Honduras?", opciones:["Tegucigalpa","San Pedro Sula","La Ceiba","Comayagua"], respuesta:"Tegucigalpa", explicacion:"Tegucigalpa es la capital y ciudad más grande de Honduras."},
-    {pregunta:"¿Cuál es el ave nacional de Honduras?", opciones:["Guacamaya roja","Águila calva","Tucán","Pavo real"], respuesta:"Guacamaya roja", explicacion:"La guacamaya roja es el ave nacional desde 1993."},
-    {pregunta:"¿Qué plato típico es originario de Honduras?", opciones:["Baleada","Tamal","Paella","Ceviche"], respuesta:"Baleada", explicacion:"La baleada es uno de los platillos más representativos del país."},
-    {pregunta:"¿Cuál es el río más largo de Honduras?", opciones:["Río Ulúa","Río Patuca","Río Lempa","Río Coco"], respuesta:"Río Patuca", explicacion:"El río Patuca es el más largo, con aproximadamente 500 km."},
-    {pregunta:"¿Cuál es la moneda oficial de Honduras?", opciones:["Lempira","Dólar","Peso","Colón"], respuesta:"Lempira", explicacion:"El Lempira es la moneda oficial desde 1931."},
-    {pregunta:"¿Quién fue el prócer nacional de Honduras cuyo nombre lleva la moneda?", opciones:["Lempira","Francisco Morazán","José Trinidad Cabañas","Manuel Bonilla"], respuesta:"Lempira", explicacion:"Lempira fue un cacique indígena y héroe nacional."},
-    {pregunta:"¿Cuál es la segunda ciudad más poblada de Honduras?", opciones:["San Pedro Sula","La Ceiba","Choluteca","Comayagua"], respuesta:"San Pedro Sula", explicacion:"San Pedro Sula es el principal centro industrial del país."},
-    {pregunta:"¿Cuál es la festividad más importante de Honduras?", opciones:["Fiesta de la Virgen de Suyapa","Carnaval de La Ceiba","Semana Santa","Día de la Independencia"], respuesta:"Fiesta de la Virgen de Suyapa", explicacion:"Celebrada el 3 de febrero, es la fiesta religiosa más grande del país."},
-    {pregunta:"¿Qué cultura precolombina habitó Honduras?", opciones:["Maya","Azteca","Inca","Olmeca"], respuesta:"Maya", explicacion:"Los mayas habitaron la región occidental y noroccidental del país."},
-     {pregunta:"¿Cuál es el departamento más grande de Honduras?", opciones:["Olancho","Cortés","Atlántida","Yoro"], respuesta:"Olancho", explicacion:"Olancho es el departamento más grande en extensión territorial."},
+  <script>
+    const preguntas = [
+      {
+         {pregunta:"¿Cuál es el departamento más grande de Honduras?", opciones:["Olancho","Cortés","Atlántida","Yoro"], respuesta:"Olancho", explicacion:"Olancho es el departamento más grande en extensión territorial."},
   {pregunta:"¿Cuál es el nombre del volcán más alto en Honduras?", opciones:["Volcán La Tigra","Volcán de Celaque","Volcán de Santa Bárbara","No hay volcanes activos"], respuesta:"No hay volcanes activos", explicacion:"Honduras no tiene volcanes activos."},
   {pregunta:"¿Qué mar baña las costas de Honduras?", opciones:["Mar Caribe","Océano Pacífico","Mar Mediterráneo","Océano Atlántico"], respuesta:"Mar Caribe", explicacion:"La costa norte de Honduras está bañada por el Mar Caribe."},
   {pregunta:"¿Qué deporte es el más popular en Honduras?", opciones:["Fútbol","Baloncesto","Béisbol","Voleibol"], respuesta:"Fútbol", explicacion:"El fútbol es el deporte más popular y seguido en Honduras."},
@@ -200,76 +178,56 @@
   {pregunta:"¿Cuál es la moneda oficial de Honduras?", opciones:["Lempira","Dólar","Peso","Colón"], respuesta:"Lempira", explicacion:"Moneda oficial del país."},
   {pregunta:"¿Cuál es el nombre del pico más alto de Honduras?", opciones:["Pico Celaque","Pico Bonito","Pico La Tigra","Pico Turín"], respuesta:"Pico Celaque", explicacion:"Pico más alto con 2,849 metros."}
 
-  ];
+    ];
 
-  // Agrego acá el shuffle para desordenar arreglos
-  function shuffle(array) {
-    for(let i = array.length -1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i +1));
-      [array[i], array[j]] = [array[j], array[i]];
+    let puntaje = 0;
+    let indiceActual = 0;
+
+    function mostrarPregunta() {
+      if (indiceActual >= preguntas.length) {
+        document.getElementById("question").textContent = "Juego terminado. Obtuviste " + puntaje + " puntos.";
+        document.getElementById("options").innerHTML = '<button class="option" onclick="reiniciarJuego()">Jugar de nuevo</button>';
+        document.getElementById("feedback").textContent = "";
+        document.getElementById("score").textContent = "Trivia completada.";
+        return;
+      }
+
+      const preguntaActual = preguntas[indiceActual];
+      document.getElementById("question").textContent = preguntaActual.pregunta;
+      document.getElementById("feedback").textContent = "";
+
+      document.getElementById("options").innerHTML = "";
+      preguntaActual.opciones.forEach(opcion => {
+        const boton = document.createElement("button");
+        boton.textContent = opcion;
+        boton.className = "option";
+        boton.onclick = () => verificarRespuesta(opcion);
+        document.getElementById("options").appendChild(boton);
+      });
+
+      document.getElementById("score").textContent = `Puntaje: ${puntaje} | Pregunta ${indiceActual + 1} de ${preguntas.length}`;
     }
-    return array;
-  }
 
-  let preguntas = [];
-  let preguntaActual = 0;
-  let puntaje = 0;
+    function verificarRespuesta(respuesta) {
+      const correcta = preguntas[indiceActual].correcta;
+      if (respuesta === correcta) {
+        puntaje += 10;
+        document.getElementById("feedback").textContent = "✅ ¡Correcto!";
+      } else {
+        document.getElementById("feedback").textContent = `❌ Incorrecto. La respuesta era: ${correcta}`;
+      }
+      indiceActual++;
+      setTimeout(mostrarPregunta, 1000);
+    }
 
-  function iniciarJuego() {
-    preguntas = shuffle([...preguntasOriginales]); // copia y mezcla
-    preguntas = preguntas.slice(0, 100); // tomamos 100 preguntas (o menos si no hay 100)
-    preguntaActual = 0;
-    puntaje = 0;
-    document.getElementById("pantallaInicio").classList.remove("activa");
-    document.getElementById("pantallaResultado").classList.remove("activa");
-    document.getElementById("pantallaPregunta").classList.add("activa");
-    mostrarPregunta();
-  }
-
-  function mostrarPregunta() {
-    const actual = preguntas[preguntaActual];
-    document.getElementById("textoPregunta").textContent = actual.pregunta;
-
-    // Opciones mezcladas
-    const opcionesMezcladas = shuffle([...actual.opciones]);
-
-    const opcionesDiv = document.getElementById("opciones");
-    opcionesDiv.innerHTML = "";
-    opcionesMezcladas.forEach(opcion => {
-      const btn = document.createElement("button");
-      btn.textContent = opcion;
-      btn.className = "opcion";
-      btn.onclick = () => verificarRespuesta(opcion);
-      opcionesDiv.appendChild(btn);
-    });
-  }
-
-  function verificarRespuesta(opcionSeleccionada) {
-    const actual = preguntas[preguntaActual];
-    const esCorrecta = opcionSeleccionada === actual.respuesta;
-    if (esCorrecta) puntaje++;
-    alert((esCorrecta ? "✅ Correcto!" : "❌ Incorrecto") + "\n" + actual.explicacion);
-    preguntaActual++;
-    if (preguntaActual < preguntas.length) {
+    function reiniciarJuego() {
+      puntaje = 0;
+      indiceActual = 0;
       mostrarPregunta();
-    } else {
-      mostrarResultado();
     }
-  }
 
-  function mostrarResultado() {
-    document.getElementById("pantallaPregunta").classList.remove("activa");
-    document.getElementById("pantallaResultado").classList.add("activa");
-    document.getElementById("puntajeFinal").textContent = `Puntaje: ${puntaje} / ${preguntas.length}`;
-  }
-
-  function reiniciarJuego() {
-    preguntaActual = 0;
-    puntaje = 0;
-    document.getElementById("pantallaResultado").classList.remove("activa");
-    document.getElementById("pantallaInicio").classList.add("activa");
-  }
-</script>
-
+    mostrarPregunta();
+  </script>
 </body>
+
 </html>
