@@ -37,69 +37,72 @@
 <body>
 
 <h1>Trivia Retro Honduras</h1>
-<div id="score">Puntaje: 0 | Pregunta 1 de 10</div>
+<div id="score">Puntaje: 0 | Pregunta 1 de 100</div>
 <div id="question"></div>
 <div id="options"></div>
 <div id="feedback"></div>
 
 <p style="margin-top:40px; font-size:0.9em;">
-  Este juego educativo fue desarrollado por La RED — Red Educomunicativa para el Desarrollo.<br>
+  Este juego educativo fue desarrollado por La RED Radio — Red Educomunicativa para el Desarrollo.<br>
   Escúchanos en línea en <a href="https://www.laredradio.com" target="_blank">www.laredradio.com</a>
 </p>
 
 <script>
   const preguntas = [
-    {
-      pregunta: "¿Cuál es la capital de Honduras?",
-      opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"],
-      respuestaCorrecta: "Tegucigalpa"
-    },
-    {
-      pregunta: "¿En qué año se firmó la independencia de Honduras?",
-      opciones: ["1821", "1810", "1830", "1850"],
-      respuestaCorrecta: "1821"
-    },
-    {
-      pregunta: "¿Cuál es el ave nacional de Honduras?",
-      opciones: ["Guacamaya roja", "Colibrí", "Quetzal", "Águila arpía"],
-      respuestaCorrecta: "Guacamaya roja"
-    },
-    {
-      pregunta: "¿Qué mar baña la costa norte de Honduras?",
-      opciones: ["Mar Caribe", "Océano Atlántico", "Océano Pacífico", "Mar de Cortés"],
-      respuestaCorrecta: "Mar Caribe"
-    },
-    {
-      pregunta: "¿Cuál es el árbol nacional de Honduras?",
-      opciones: ["Pino", "Caoba", "Ceiba", "Roble"],
-      respuestaCorrecta: "Pino"
-    },
-    {
-      pregunta: "¿Qué ciudad es considerada la capital industrial de Honduras?",
-      opciones: ["Tegucigalpa", "La Ceiba", "San Pedro Sula", "Comayagua"],
-      respuestaCorrecta: "San Pedro Sula"
-    },
-    {
-      pregunta: "¿Cómo se llama la moneda oficial de Honduras?",
-      opciones: ["Peso", "Dólar", "Lempira", "Quetzal"],
-      respuestaCorrecta: "Lempira"
-    },
-    {
-      pregunta: "¿Qué civilización precolombina habitó Copán?",
-      opciones: ["Maya", "Azteca", "Tolteca", "Inca"],
-      respuestaCorrecta: "Maya"
-    },
-    {
-      pregunta: "¿Cuál es el plato típico que lleva frijoles, mantequilla y queso en una tortilla de harina?",
-      opciones: ["Tamal", "Baleada", "Enchilada", "Tostada"],
-      respuestaCorrecta: "Baleada"
-    },
-    {
-      pregunta: "¿Qué significa la palabra 'Honduras'?",
-      opciones: ["Tierras lejanas", "Montañas verdes", "Aguas profundas", "Cielo azul"],
-      respuestaCorrecta: "Aguas profundas"
-    }
-  ];
+   const preguntas = [
+  { pregunta: "¿Cuál es la capital de Honduras?", opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"], respuestaCorrecta: "Tegucigalpa" },
+  { pregunta: "¿En qué año se firmó la independencia de Honduras?", opciones: ["1821", "1810", "1830", "1850"], respuestaCorrecta: "1821" },
+  { pregunta: "¿Cuál es el ave nacional de Honduras?", opciones: ["Guacamaya roja", "Colibrí", "Quetzal", "Águila arpía"], respuestaCorrecta: "Guacamaya roja" },
+  { pregunta: "¿Qué mar baña la costa norte de Honduras?", opciones: ["Mar Caribe", "Océano Atlántico", "Océano Pacífico", "Mar de Cortés"], respuestaCorrecta: "Mar Caribe" },
+  { pregunta: "¿Cuál es el árbol nacional de Honduras?", opciones: ["Pino", "Caoba", "Ceiba", "Roble"], respuestaCorrecta: "Pino" },
+  { pregunta: "¿Qué ciudad es considerada la capital industrial de Honduras?", opciones: ["Tegucigalpa", "La Ceiba", "San Pedro Sula", "Comayagua"], respuestaCorrecta: "San Pedro Sula" },
+  { pregunta: "¿Cómo se llama la moneda oficial de Honduras?", opciones: ["Peso", "Dólar", "Lempira", "Quetzal"], respuestaCorrecta: "Lempira" },
+  { pregunta: "¿Qué civilización precolombina habitó Copán?", opciones: ["Maya", "Azteca", "Tolteca", "Inca"], respuestaCorrecta: "Maya" },
+  { pregunta: "¿Cuál es el plato típico que lleva frijoles, mantequilla y queso en una tortilla de harina?", opciones: ["Tamal", "Baleada", "Enchilada", "Tostada"], respuestaCorrecta: "Baleada" },
+  { pregunta: "¿Qué significa la palabra 'Honduras'?", opciones: ["Tierras lejanas", "Montañas verdes", "Aguas profundas", "Cielo azul"], respuestaCorrecta: "Aguas profundas" },
+  { pregunta: "¿Cuál es el héroe indígena que luchó contra los españoles?", opciones: ["Lempira", "Morazán", "Túpac Amaru", "Cuauhtémoc"], respuestaCorrecta: "Lempira" },
+  { pregunta: "¿Cuál es el plato típico conocido por su sopa con leche de coco?", opciones: ["Baleada", "Sopa de caracol", "Montuca", "Tamalitos"], respuestaCorrecta: "Sopa de caracol" },
+  { pregunta: "¿Cuál es la moneda oficial de Honduras?", opciones: ["Peso", "Dólar", "Lempira", "Real"], respuestaCorrecta: "Lempira" },
+  { pregunta: "¿Qué departamento está ubicado más al sur de Honduras?", opciones: ["Gracias a Dios", "Choluteca", "Copán", "Colón"], respuestaCorrecta: "Choluteca" },
+  { pregunta: "¿Cómo se llama el archipiélago turístico ubicado al norte del país?", opciones: ["Galápagos", "Islas de la Bahía", "San Andrés", "Corn Islands"], respuestaCorrecta: "Islas de la Bahía" },
+  { pregunta: "¿Cuál es la ciudad industrial de Honduras?", opciones: ["Tegucigalpa", "La Ceiba", "Comayagua", "San Pedro Sula"], respuestaCorrecta: "San Pedro Sula" },
+  { pregunta: "¿Qué civilización construyó Copán?", opciones: ["Azteca", "Inca", "Maya", "Olmeca"], respuestaCorrecta: "Maya" },
+  { pregunta: "¿Qué mar rodea a las Islas de la Bahía?", opciones: ["Mar Caribe", "Mar Rojo", "Mar de Cortés", "Océano Índico"], respuestaCorrecta: "Mar Caribe" },
+  { pregunta: "¿Cuál es el ave nacional de Honduras?", opciones: ["Colibrí", "Guacamaya roja", "Tucán", "Águila arpía"], respuestaCorrecta: "Guacamaya roja" },
+  { pregunta: "¿Qué ciudad fue capital de Honduras durante la colonia?", opciones: ["San Pedro Sula", "Comayagua", "Santa Rosa de Copán", "Juticalpa"], respuestaCorrecta: "Comayagua" },
+  { pregunta: "¿Qué deporte es el más popular en Honduras?", opciones: ["Béisbol", "Baloncesto", "Fútbol", "Voleibol"], respuestaCorrecta: "Fútbol" },
+  { pregunta: "¿Cuál es el nombre oficial de Honduras?", opciones: ["República Popular de Honduras", "Estado Federal de Honduras", "República de Honduras", "Honduras Unida"], respuestaCorrecta: "República de Honduras" },
+  { pregunta: "¿Cuántos departamentos tiene Honduras?", opciones: ["17", "18", "15", "20"], respuestaCorrecta: "18" },
+  { pregunta: "¿Qué flor es la flor nacional de Honduras?", opciones: ["Rosa", "Orquídea Brassavola Digbyana", "Lirio", "Girasol"], respuestaCorrecta: "Orquídea Brassavola Digbyana" },
+  { pregunta: "¿Cuál es el grupo étnico afrodescendiente más representativo en Honduras?", opciones: ["Garífuna", "Kuna", "Mapuche", "Aymara"], respuestaCorrecta: "Garífuna" },
+  { pregunta: "¿Qué animal aparece en el escudo de Honduras?", opciones: ["Jaguar", "Venado", "Ninguno", "Águila"], respuestaCorrecta: "Ninguno" },
+  { pregunta: "¿Cuál es el plato típico que se come tradicionalmente los lunes en Honduras?", opciones: ["Montuca", "Sopa de caracol", "Sopa de frijoles", "Baleada"], respuestaCorrecta: "Sopa de frijoles" },
+  { pregunta: "¿Qué instrumento se usa tradicionalmente en la música garífuna?", opciones: ["Acordeón", "Marimba", "Tambor", "Guitarra"], respuestaCorrecta: "Tambor" },
+  { pregunta: "¿En qué año fue fundada Tegucigalpa?", opciones: ["1578", "1700", "1821", "1492"], respuestaCorrecta: "1578" },
+  { pregunta: "¿Qué departamento es el más grande en extensión territorial?", opciones: ["Santa Bárbara", "Gracias a Dios", "Olancho", "Colón"], respuestaCorrecta: "Olancho" },
+  { pregunta: "¿Cuál es el nombre del aeropuerto internacional en Tegucigalpa?", opciones: ["Toncontín", "Palmerola", "La Aurora", "Ramón Villeda Morales"], respuestaCorrecta: "Toncontín" },
+  { pregunta: "¿Qué golfo comparte Honduras con Nicaragua y El Salvador?", opciones: ["Golfo de México", "Golfo de Panamá", "Golfo de Fonseca", "Golfo Dulce"], respuestaCorrecta: "Golfo de Fonseca" },
+  { pregunta: "¿Qué presidente hondureño es recordado por su lucha liberal y reformas educativas?", opciones: ["Carlos Flores", "Francisco Morazán", "Rafael Callejas", "Juan Orlando Hernández"], respuestaCorrecta: "Francisco Morazán" },
+  { pregunta: "¿Qué isla hondureña es famosa por su turismo y playas de aguas cristalinas?", opciones: ["Guanaja", "Utila", "Roatán", "Amapala"], respuestaCorrecta: "Roatán" },
+  { pregunta: "¿Cuál es el río más largo de Honduras?", opciones: ["Río Choluteca", "Río Ulúa", "Río Patuca", "Río Aguán"], respuestaCorrecta: "Río Patuca" },
+  { pregunta: "¿Qué zona arqueológica hondureña fue declarada Patrimonio de la Humanidad por la UNESCO?", opciones: ["Trujillo", "Gracias", "Ruinas de Copán", "Comayagua"], respuestaCorrecta: "Ruinas de Copán" },
+  { pregunta: "¿Qué estilo musical representa la cultura garífuna?", opciones: ["Rock", "Soca", "Punta", "Reggae"], respuestaCorrecta: "Punta" },
+  { pregunta: "¿En qué mes se celebra la Feria Juniana en San Pedro Sula?", opciones: ["Junio", "Julio", "Mayo", "Agosto"], respuestaCorrecta: "Junio" },
+  { pregunta: "¿Qué ciudad es conocida por sus rosquillas en miel?", opciones: ["Ojojona", "Danlí", "Yuscarán", "Comayagua"], respuestaCorrecta: "Danlí" },
+  { pregunta: "¿Qué científico hondureño participó en misiones de la NASA?", opciones: ["Jesús Aguilar Paz", "Salvador Moncada", "Franklin Chang Díaz", "Marco Cáceres"], respuestaCorrecta: "Marco Cáceres" },
+  { pregunta: "¿Qué ciudad es famosa por su Feria Isidra o Feria del Agricultor?", opciones: ["Tegucigalpa", "San Pedro Sula", "La Ceiba", "Danlí"], respuestaCorrecta: "La Ceiba" },
+  { pregunta: "¿Qué ciudad hondureña es conocida como la 'Capital de la Sábana'?", opciones: ["Siguatepeque", "Choluteca", "Santa Rosa de Copán", "Juticalpa"], respuestaCorrecta: "Siguatepeque" },
+  { pregunta: "¿Cuál es el volcán más alto de Honduras?", opciones: ["Volcán Pacayita", "Volcán San Miguel", "Volcán de Zacate Grande", "No hay volcanes activos"], respuestaCorrecta: "No hay volcanes activos" },
+  { pregunta: "¿Qué producto agrícola es uno de los principales de exportación en Honduras?", opciones: ["Café", "Cacao", "Banano", "Arroz"], respuestaCorrecta: "Café" },
+  { pregunta: "¿Cuál es la principal lengua indígena hablada en Honduras después del español?", opciones: ["Garífuna", "Lenca", "Miskito", "Tolupan"], respuestaCorrecta: "Garífuna" },
+  { pregunta: "¿Cuál es el plato tradicional hecho de maíz y carne que se come en Honduras?", opciones: ["Tamal", "Baleada", "Montuca", "Pupusa"], respuestaCorrecta: "Montuca" },
+  { pregunta: "¿Cuál es la montaña más alta de Honduras?", opciones: ["Cerro Las Minas", "Pico Bonito", "Montaña Celaque", "Cerro Azul"], respuestaCorrecta: "Cerro Las Minas" },
+  { pregunta: "¿Cuál es el principal puerto marítimo de Honduras?", opciones: ["Puerto Cortés", "La Ceiba", "Trujillo", "Amapala"], respuestaCorrecta: "Puerto Cortés" },
+  { pregunta: "¿Qué departamento hondureño limita con El Salvador?", opciones: ["Choluteca", "Ocotepeque", "Copán", "Olancho"], respuestaCorrecta: "Ocotepeque" },
+  { pregunta: "¿Qué importante festividad hondureña se celebra en diciembre con posadas y villancicos?", opciones: ["Semana Santa", "Feria Juniana", "Navidad", "Día de la Independencia"], respuestaCorrecta: "Navidad" },
+  { pregunta: "¿Cuál es el nombre del baile tradicional que representa a la cultura garífuna?", opciones: ["La Punta", "El Son", "La Cumbia", "La Salsa"], respuestaCorrecta: "La Punta" },
+  { pregunta: "¿Cuál es el equipo de fútbol más popular de Honduras?", opciones: ["Real España", "Motagua", "Olimpia", "Vida"], respuestaCorrecta: "Olimpia" }
+];
 
   let puntaje = 0;
   let preguntaActual = 0;
