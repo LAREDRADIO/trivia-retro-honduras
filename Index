@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivia Retro - Honduras</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00FF00;
+      font-family: 'Press Start 2P', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .pantalla {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .activa {
+      display: flex;
+    }
+    button {
+      background: #000;
+      color: #00FF00;
+      border: 2px solid #00FF00;
+      padding: 10px;
+      font-family: 'Press Start 2P';
+      cursor: pointer;
+    }
+    .opcion {
+      display: block;
+      margin: 10px 0;
+    }
+    .dato-extra {
+      font-size: 12px;
+      color: #FFFF00;
+    }
+  </style>
+</head>
+<body>
+  <div id="pantallaInicio" class="pantalla activa">
+    <h1>🎮 TRIVIA RETRO: HONDURAS 🇭🇳</h1>
+    <p>Presiona INICIAR para jugar</p>
+    <button onclick="iniciarJuego()">INICIAR</button>
+  </div>
+
+  <div id="pantallaPregunta" class="pantalla">
+    <h2 id="textoPregunta"></h2>
+    <div id="opciones"></div>
+  </div>
+
+  <div id="pantallaResultado" class="pantalla">
+    <h2>🎉 ¡Juego terminado!</h2>
+    <p id="puntajeFinal"></p>
+    <button onclick="reiniciarJuego()">JUGAR DE NUEVO</button>
+  </div>
+
+  <script>
+    const preguntas = [
+      {
+        pregunta: "¿Cuándo se firmó la independencia de Honduras?",
+        opciones: ["1821", "1844", "1800", "1876"],
+        respuesta: "1821",
+        explicacion: "Fue proclamada el 15 de septiembre de 1821."
+      },
+      {
+        pregunta: "¿Cuál es una comida típica hondureña?",
+        opciones: ["Baleada", "Sushi", "Arepa", "Empanada chilena"],
+        respuesta: "Baleada",
+        explicacion: "La baleada es uno de los platillos más representativos del país."
+      },
+      {
+        pregunta: "¿Cuál es el ave nacional de Honduras?",
+        opciones: ["Guacamaya roja", "Águila calva", "Tucán", "Pavo real"],
+        respuesta: "Guacamaya roja",
+        explicacion: "La guacamaya roja es el ave nacional desde 1993."
+      }
+    ];
+
+    let preguntaActual = 0;
+    let puntaje = 0;
+
+    function iniciarJuego() {
+      document.getElementById("pantallaInicio").classList.remove("activa");
+      document.getElementById("pantallaPregunta").classList.add("activa");
+      mostrarPregunta();
+    }
+
+    function mostrarPregunta() {
+      const actual = preguntas[preguntaActual];
+      document.getElementById("textoPregunta").textContent = actual.pregunta;
+      const opcionesDiv = document.getElementById("opciones");
+      opcionesDiv.innerHTML = "";
+      actual.opciones.forEach(opcion => {
+        const btn = document.createElement("button");
+        btn.textContent = opcion;
+        btn.className = "opcion";
+        btn.onclick = () => verificarRespuesta(opcion);
+        opcionesDiv.appendChild(btn);
+      });
+    }
+
+    function verificarRespuesta(opcionSeleccionada) {
+      const actual = preguntas[preguntaActual];
+      const esCorrecta = opcionSeleccionada === actual.respuesta;
+      if (esCorrecta) puntaje++;
+      alert((esCorrecta ? "✅ Correcto!" : "❌ Incorrecto") + "\n" + actual.explicacion);
+      preguntaActual++;
+      if (preguntaActual < preguntas.length) {
+        mostrarPregunta();
+      } else {
+        mostrarResultado();
+      }
+    }
+
+    function mostrarResultado() {
+      document.getElementById("pantallaPregunta").classList.remove("activa");
+      document.getElementById("pantallaResultado").classList.add("activa");
+      document.getElementById("puntajeFinal").textContent = `Puntaje: ${puntaje}/${preguntas.length}`;
+    }
+
+    function reiniciarJuego() {
+      preguntaActual = 0;
+      puntaje = 0;
+      document.getElementById("pantallaResultado").classList.remove("activa");
+      document.getElementById("pantallaInicio").classList.add("activa");
+    }
+  </script>
+</body>
+</html>
