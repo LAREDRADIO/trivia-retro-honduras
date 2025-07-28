@@ -149,7 +149,6 @@
 
 <script>
 const preguntas = [
- const preguntas = [
   { pregunta: "¿Cuál es la capital de Honduras?", opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"], respuestaCorrecta: 3 },
   { pregunta: "¿En qué año se firmó la independencia de Honduras?", opciones: ["1821", "1810", "1830", "1850"], respuestaCorrecta: 0 },
   { pregunta: "¿Cuál es el ave nacional de Honduras?", opciones: ["Guacamaya roja", "Colibrí", "Quetzal", "Águila arpía"], respuestaCorrecta: 0 },
@@ -244,52 +243,74 @@ const preguntas = [
   { pregunta: "¿Qué nombre recibe la moneda hondureña?", opciones: ["Peso", "Dólar", "Lempira", "Quetzal"], respuestaCorrecta: 2 }
 ];
 
-// Mezclar preguntas para que salgan al azar
-function mezclarArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-let preguntasBarajadas = [...preguntas];
-mezclarArray(preguntasBarajadas);
-
+// Variables de juego
 let indicePreguntaActual = 0;
 let puntaje = 0;
-const totalPreguntas = preguntasBarajadas.length;
+const totalPreguntas = preguntas.length;
 
 const questionEl = document.getElementById("question");
 const optionsEl = document.getElementById("options");
 const scoreEl = document.getElementById("score");
 const feedbackEl = document.getElementById("feedback");
+const timerEl = document.getElementById("timer");
 const correctSound = document.getElementById("correctSound");
 const wrongSound = document.getElementById("wrongSound");
 
+let tiempoRestante = 15;
+let intervalo;
+
+function iniciarTemporizador() {
+  tiempoRestante = 15;
+  timerEl.textContent = `Tiempo: ${tiempoRestante}`;
+  
+  intervalo = setInterval(() => {
+    tiempoRestante--;
+    timerEl.textContent = `Tiempo: ${tiempoRestante}`;
+    
+    if (tiempoRestante <= 0) {
+      clearInterval(intervalo);
+      feedbackEl.textContent = `Se acabó el tiempo. La respuesta correcta era: ${preguntas[indicePreguntaActual].opciones[preguntas[indicePreguntaActual].respuestaCorrecta]}`;
+      wrongSound.play();
+      indicePreguntaActual++;
+      setTimeout(() => {
+        feedbackEl.textContent = "";
+        mostrarPregunta();
+      }, 2500);
+    }
+  }, 1000);
+}
+
 function mostrarPregunta() {
-  feedbackEl.textContent = "";
+  clearInterval(intervalo);
   if(indicePreguntaActual >= totalPreguntas) {
     questionEl.textContent = `¡Juego terminado! Puntaje final: ${puntaje} / ${totalPreguntas}`;
     optionsEl.innerHTML = `<button id="restart">Reiniciar juego</button>`;
     document.getElementById("restart").addEventListener("click", reiniciarJuego);
+    timerEl.textContent = "";
     return;
   }
   
-  const preguntaObj = preguntasBarajadas[indicePreguntaActual];
+  const preguntaObj = preguntas[indicePreguntaActual];
   questionEl.textContent = `Pregunta ${indicePreguntaActual + 1} de ${totalPreguntas}: ${preguntaObj.pregunta}`;
   optionsEl.innerHTML = "";
-
+  feedbackEl.textContent = "";
+  
   preguntaObj.opciones.forEach((opcion, i) => {
     const btn = document.createElement("button");
     btn.className = "option";
     btn.textContent = opcion;
-    btn.onclick = () => seleccionarRespuesta(i);
+    btn.onclick = () => {
+      clearInterval(intervalo);
+      seleccionarRespuesta(i);
+    };
     optionsEl.appendChild(btn);
   });
+
+  iniciarTemporizador();
 }
 
 function seleccionarRespuesta(indiceSeleccionado) {
-  const preguntaObj = preguntasBarajadas[indicePreguntaActual];
+  const preguntaObj = preguntas[indicePreguntaActual];
   if(indiceSeleccionado === preguntaObj.respuestaCorrecta) {
     puntaje++;
     feedbackEl.textContent = "¡Correcto!";
@@ -306,11 +327,11 @@ function seleccionarRespuesta(indiceSeleccionado) {
 function reiniciarJuego() {
   puntaje = 0;
   indicePreguntaActual = 0;
-  mezclarArray(preguntasBarajadas);
   scoreEl.textContent = `Puntaje: ${puntaje}`;
   mostrarPregunta();
 }
 
+// Iniciar juego
 mostrarPregunta();
 </script>
 
