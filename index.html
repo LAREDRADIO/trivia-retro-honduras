@@ -1,165 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Trivia Retro Honduras</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-  body {
-    background: #000;
-    color: #00ff00;
-    font-family: 'Press Start 2P', cursive;
-    padding: 20px;
-    user-select: none;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-  }
-
-  .cursor {
-    display: inline-block;
-    width: 10px;
-    background-color: #00ff00;
-    animation: blink 1s steps(2, start) infinite;
-    vertical-align: bottom;
-  }
-
-  @keyframes blink {
-    0%, 50% { background-color: #00ff00; }
-    51%, 100% { background-color: transparent; }
-  }
-
-  #score, #timer, #level {
-    font-size: 0.9rem;
-    margin: 8px 0;
-  }
-
-  #question {
-    font-size: 1.2rem;
-    margin: 20px 0 10px;
-    min-height: 60px;
-  }
-
-  #options {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  button.option {
-    background: black;
-    border: 3px solid #00ff00;
-    color: #00ff00;
-    padding: 12px 20px;
-    margin: 6px auto;
-    width: 300px;
-    max-width: 90vw;
-    cursor: pointer;
-    font-size: 14px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    transition: background 0.2s ease, color 0.2s ease;
-    display: block;
-  }
-
-  button.option:hover {
-    background: #00ff00;
-    color: black;
-  }
-
-  #feedback {
-    margin-top: 15px;
-    font-weight: bold;
-    min-height: 24px;
-    height: 24px;
-  }
-
-  button#restart {
-    background: #00ff00;
-    border: none;
-    color: black;
-    padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    font-family: 'Press Start 2P', cursive;
-  }
-
-  a {
-    color: #00ff00;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  .footer {
-    margin-top: 40px;
-    font-size: 0.8rem;
-    color: #0a0;
-  }
-
-  /* Scanlines efecto CRT */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    background:
-      repeating-linear-gradient(
-        0deg,
-        rgba(0, 255, 0, 0.05),
-        rgba(0, 255, 0, 0.05) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-    z-index: 1000;
-  }
-</style>
-</head>
-<body>
-
-<h1>Trivia Retro Honduras<span class="cursor"></span></h1>
-
-<div id="score">Puntaje: 0</div>
-<div id="level">Nivel: 1</div>
-<div id="timer">Tiempo: 15</div>
-<div id="question">Cargando pregunta...</div>
-<div id="options"></div>
-<div id="feedback"></div>
-
-<div class="footer">
-  Este juego educativo fue desarrollado por <strong>La RED</strong> — Red Educomunicativa para el Desarrollo.<br/>
-  Escúchanos en línea en <a href="https://www.laredradio.com" target="_blank" rel="noopener noreferrer">www.laredradio.com</a>
-</div>
-
-<!-- Sonidos embebidos para correcto e incorrecto -->
-<audio id="correctSound" preload="auto">
-  <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
-</audio>
-<audio id="wrongSound" preload="auto">
-  <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRAAAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA" type="audio/wav">
-</audio>
-
 <script>
+// Base de datos de preguntas
 const preguntas = [
-
-  { pregunta: "¿Cuál es la capital de Honduras?", opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"], respuestaCorrecta: 3 },
-  { pregunta: "¿En qué año se firmó la independencia de Honduras?", opciones: ["1821", "1810", "1830", "1850"], respuestaCorrecta: 0 },
-  { pregunta: "¿Cuál es el ave nacional de Honduras?", opciones: ["Guacamaya roja", "Colibrí", "Quetzal", "Águila arpía"], respuestaCorrecta: 0 },
-  { pregunta: "¿Qué mar baña la costa norte de Honduras?", opciones: ["Mar Caribe", "Océano Atlántico", "Océano Pacífico", "Mar de Cortés"], respuestaCorrecta: 0 },
-  { pregunta: "¿Cuál es el árbol nacional de Honduras?", opciones: ["Pino", "Caoba", "Ceiba", "Roble"], respuestaCorrecta: 0 },
-  { pregunta: "¿Qué ciudad es considerada la capital industrial de Honduras?", opciones: ["Tegucigalpa", "La Ceiba", "San Pedro Sula", "Comayagua"], respuestaCorrecta: 2 },
-  { pregunta: "¿Cómo se llama la moneda oficial de Honduras?", opciones: ["Peso", "Dólar", "Lempira", "Quetzal"], respuestaCorrecta: 2 },
-  { pregunta: "¿Qué civilización precolombina habitó Copán?", opciones: ["Maya", "Azteca", "Tolteca", "Inca"], respuestaCorrecta: 0 },
-  { pregunta: "¿Cuál es el plato típico que lleva frijoles, mantequilla y queso en una tortilla de harina?", opciones: ["Tamal", "Baleada", "Enchilada", "Tostada"], respuestaCorrecta: 1 },
-  { pregunta: "¿Qué significa la palabra 'Honduras'?", opciones: ["Tierras lejanas", "Montañas verdes", "Aguas profundas", "Cielo azul"], respuestaCorrecta: 2 },
   { pregunta: "¿Cuál es la capital de Honduras?", opciones: ["San Pedro Sula", "La Ceiba", "Choluteca", "Tegucigalpa"], respuestaCorrecta: 3 },
   { pregunta: "¿En qué año se firmó la independencia de Honduras?", opciones: ["1821", "1810", "1830", "1850"], respuestaCorrecta: 0 },
   { pregunta: "¿Cuál es el ave nacional de Honduras?", opciones: ["Guacamaya roja", "Colibrí", "Quetzal", "Águila arpía"], respuestaCorrecta: 0 },
@@ -245,22 +86,24 @@ const preguntas = [
   { pregunta: "¿Qué es el Palo de Mayo?", opciones: ["Danza tradicional", "Comida típica", "Instrumento musical", "Fiesta religiosa"], respuestaCorrecta: 0 },
   { pregunta: "¿Cuál es el nombre del volcán ubicado cerca de la frontera con El Salvador?", opciones: ["Volcán San Miguel", "Volcán Izalco", "Volcán Pacaya", "No hay volcanes activos en Honduras"], respuestaCorrecta: 3 },
   { pregunta: "¿Qué cultura indígena es originaria de la región de La Mosquitia?", opciones: ["Miskito", "Lenca", "Tolupan", "Pech"], respuestaCorrecta: 0 },
+  { pregunta: "¿Cuál es la principal fuente de energía en Honduras?", opciones: ["Carbón", "Petróleo", "Energía hidroeléctrica", "Gas natural"], respuestaCorrecta: 2 },
   { pregunta: "¿Cuál es la flor nacional de Honduras?", opciones: ["Orquídea Brassavola Digbyana", "Rosa", "Lirio", "Girasol"], respuestaCorrecta: 0 },
   { pregunta: "¿Qué plato tradicional hondureño se prepara con carne y maíz?", opciones: ["Montuca", "Baleada", "Tamal", "Enchilada"], respuestaCorrecta: 2 },
   { pregunta: "¿Qué evento histórico marcó la independencia de Honduras?", opciones: ["La firma del Acta de Independencia", "La batalla de Copán", "La llegada de Cristóbal Colón", "La Guerra de Castas"], respuestaCorrecta: 0 },
   { pregunta: "¿Cuál es la isla más grande del archipiélago de Islas de la Bahía?", opciones: ["Roatán", "Utila", "Guanaja", "Cayos Cochinos"], respuestaCorrecta: 0 },
   { pregunta: "¿Cuál es la principal lengua indígena en el occidente de Honduras?", opciones: ["Lenca", "Garífuna", "Miskito", "Tolupan"], respuestaCorrecta: 0 },
+  { pregunta: "¿Qué nombre recibe la moneda hondureña?", opciones: ["Peso", "Dólar", "Lempira", "Quetzal"], respuestaCorrecta: 2 }
 
-  // Mezcla las preguntas para que salgan en orden aleatorio
+];
+
+// Mezclar preguntas al inicio
 function mezclarPreguntas(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
-
 mezclarPreguntas(preguntas);
-];
 
 // Variables de juego
 let indicePreguntaActual = 0;
@@ -301,19 +144,19 @@ function iniciarTemporizador() {
 
 function mostrarPregunta() {
   clearInterval(intervalo);
-  if(indicePreguntaActual >= totalPreguntas) {
+  if (indicePreguntaActual >= totalPreguntas) {
     questionEl.textContent = `¡Juego terminado! Puntaje final: ${puntaje} / ${totalPreguntas}`;
     optionsEl.innerHTML = `<button id="restart">Reiniciar juego</button>`;
     document.getElementById("restart").addEventListener("click", reiniciarJuego);
     timerEl.textContent = "";
     return;
   }
-  
+
   const preguntaObj = preguntas[indicePreguntaActual];
   questionEl.textContent = `Pregunta ${indicePreguntaActual + 1} de ${totalPreguntas}: ${preguntaObj.pregunta}`;
   optionsEl.innerHTML = "";
   feedbackEl.textContent = "";
-  
+
   preguntaObj.opciones.forEach((opcion, i) => {
     const btn = document.createElement("button");
     btn.className = "option";
@@ -330,7 +173,7 @@ function mostrarPregunta() {
 
 function seleccionarRespuesta(indiceSeleccionado) {
   const preguntaObj = preguntas[indicePreguntaActual];
-  if(indiceSeleccionado === preguntaObj.respuestaCorrecta) {
+  if (indiceSeleccionado === preguntaObj.respuestaCorrecta) {
     puntaje++;
     feedbackEl.textContent = "¡Correcto!";
     correctSound.play();
@@ -347,12 +190,10 @@ function reiniciarJuego() {
   puntaje = 0;
   indicePreguntaActual = 0;
   scoreEl.textContent = `Puntaje: ${puntaje}`;
+  mezclarPreguntas(preguntas);
   mostrarPregunta();
 }
 
 // Iniciar juego
 mostrarPregunta();
 </script>
-
-</body>
-</html>
